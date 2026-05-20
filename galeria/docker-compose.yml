@@ -1,0 +1,58 @@
+networks:
+  red_interna:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.99.88.0/24
+
+volumes:
+  mongo_datos:
+
+services:
+
+  mongo:
+    image: mongo:7.0
+    container_name: galeria_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    volumes:
+      - mongo_datos:/data/db
+      - ./database/init.js:/docker-entrypoint-initdb.d/init.js:ro
+    networks:
+      - red_interna
+    # SEGURIDAD: MongoDB NO expuesto al exterior
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: galeria_backend
+    restart: unless-stopped
+    environment:
+      FLASK_ENV: ${FLASK_ENV}
+      FLASK_SECRET_KEY: ${FLASK_SECRET_KEY}
+      MONGO_URI: ${MONGO_URI}
+    ports:
+      - "${BACKEND_PORT}:5000"
+    depends_on:
+      - mongo
+    networks:
+      - red_interna
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: galeria_frontend
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=http://localhost:${BACKEND_PORT}
+    ports:
+      - "5574:80"        # Puerto del frontend según requerimiento
+    depends_on:
+      - backend
+    networks:
+      - red_interna
