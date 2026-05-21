@@ -14,7 +14,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: galeria-frontend:latest
-          imagePullPolicy: Never
+          image: us-central1-docker.pkg.dev/virtualizacion-samer-aranki/repo-virtualizacion/frontend:1.0
           ports:
             - containerPort: 80

@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: galeria-backend:latest
-          imagePullPolicy: Never
+          image: us-central1-docker.pkg.dev/virtualizacion-samer-aranki/repo-virtualizacion/backend:1.0
           ports:
             - containerPort: 5000
           env:
