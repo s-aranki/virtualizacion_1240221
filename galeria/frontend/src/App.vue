@@ -393,7 +393,7 @@
 <script>
 import axios from 'axios'
 
-const API = import.meta.env.VITE_API_URL || ''
+const API = '/api'
 
 // Categorías predefinidas para los selectores del formulario
 const CATS_DEFAULT = [
