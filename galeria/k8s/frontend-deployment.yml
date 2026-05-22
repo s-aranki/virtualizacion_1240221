@@ -16,4 +16,4 @@ spec:
         - name: frontend
           image: us-central1-docker.pkg.dev/virtualizacion-samer-aranki/repo-virtualizacion/frontend:2.0
           ports:
-            - containerPort: 80
+            - containerPort: 5574
